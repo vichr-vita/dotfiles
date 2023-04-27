@@ -1,39 +1,6 @@
 bindkey -s "^F" "tmux-sessionizer\n"
 
-export PATH="/opt/homebrew/opt/postgresql@9.5/bin:$PATH"
-export PATH="$PATH:/Users/vitchrubasik/flutter/bin"
-export PATH="$PATH:/Users/vitchrubasik/chromedriver"
-export PATH="$PATH:/Users/vitchrubasik/scripts"
-export PATH="/Users/vitchrubasik/.local/bin:$PATH"
-export PATH="$HOME/.tmuxifier/bin:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
-export PATH="$HOME/.rustup/toolchains/stable-aarch64-apple-darwin/bin/:$PATH"
 
-
-# PROMPT="%~ %F{red}%B$%b%f "
-
-alias caelum='ssh vichr@10.9.8.48 -p 54864 || ssh vichr@93.187.106.197 -p 54864'
-alias provincia-finnica='ssh vichr@chrubasik.cz'
-
-
-# aliases
-alias accounting='code ~/OneDrive\ -\ VSB-TUO/accounting-journals/'
-alias dropvenv='mkdir venv && python3.9 -m venv venv/'
-alias data-science='code ~/projects/data-science/'
-alias codewars='code ~/projects/codewars/'
-alias playground-python='code ~/projects/playground/python-playground/'
-alias pythonš='python3'
-alias vite-project='npm create vite@latest'
-alias vim='nvim'
-alias rtfm='man'
-
-
-# if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
-#     exec tmux
-# fi
-
-# if I decide I really need vi mode here
-# set -o vi
 
 function wordcount() {
     ps2ascii "$1" | wc -w

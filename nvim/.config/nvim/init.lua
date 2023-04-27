@@ -219,6 +219,53 @@ require('lazy').setup({
 
   -- require 'kickstart.plugins.debug',
 
+  {
+    'kkoomen/vim-doge',
+    config = function()
+      vim.g.doge_doc_standard_python = 'google'
+      vim.g.doge_python_settings = {
+        single_quotes = 0,
+        omit_redundant_param_types = 1
+      }
+    end
+  },
+  'mfussenegger/nvim-dap',
+  {
+    'mfussenegger/nvim-dap-python',
+    config = function()
+      require('dap-python').setup('~/.virtualenvs/debugpy/bin/python')
+    end
+  },
+  {
+    'rcarriga/nvim-dap-ui',
+    config = function()
+      require("dapui").setup()
+    end
+  },
+  {
+    'nvim-neotest/neotest',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-treesitter/nvim-treesitter',
+      'antoinemadec/FixCursorHold.nvim',
+      'nvim-neotest/neotest-python'
+    },
+    config = function()
+      require('neotest').setup({
+        adapters = {
+          require('neotest-python')({
+            dap = { justMyCode = false },
+          })
+        }
+      })
+    end
+  },
+  {
+
+  },
+
+
+
   -- NOTE: The import below automatically adds your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
   --    up-to-date with whatever is in the kickstart repo.
@@ -549,6 +596,21 @@ rt.setup({
   },
 })
 
+-- doge docsting keymaps
+vim.keymap.set("n", "<leader>doc", ":DogeGenerate")
+
+-- debugging keymaps
+vim.keymap.set("n", "<F5>", ":lua require'dap'.continue()<CR>") -- might remove the buffer option later
+vim.keymap.set("n", "<F10>", ":lua require'dap'.step_over()<CR>")
+vim.keymap.set("n", "<F11>", ":lua require'dap'.step_into()<CR>")
+vim.keymap.set("n", "<F12>", ":lua require'dap'.step_out()<CR>")
+vim.keymap.set("n", "<leader>b", ":lua require'dap'.toggle_breakpoint()<CR>")
+vim.keymap.set("n", "<leader>B", ":lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition '))<CR>")
+vim.keymap.set("n", "<leader>lp",
+  ":lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>")
+vim.keymap.set("n", "<leader>dr", ":lua require'dap'.repl.open()<CR>")
+
+vim.cmd("colorscheme vichr")
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
