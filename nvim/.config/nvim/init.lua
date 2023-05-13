@@ -100,15 +100,11 @@ require('lazy').setup({
     },
   },
 
-  --  { -- Theme inspired by Atom
-  --    'navarasu/onedark.nvim',
-  --    priority = 1000,
-  --    config = function()
-  --      vim.cmd.colorscheme 'onedark'
-  --    end,
-  --  },
-  --
-
+  {
+    'simrat39/rust-tools.nvim',
+    ft = 'rust',
+    dependencies = 'neovim/nvim-lspconfig'
+  },
 
   {
     "catppuccin/nvim",
@@ -215,7 +211,6 @@ require('lazy').setup({
   --       Uncomment any of the lines below to enable them.
   require 'kickstart.plugins.autoformat',
 
-  'simrat39/rust-tools.nvim',
 
   -- require 'kickstart.plugins.debug',
 
@@ -234,6 +229,7 @@ require('lazy').setup({
     'mfussenegger/nvim-dap-python',
     config = function()
       require('dap-python').setup('~/.virtualenvs/debugpy/bin/python')
+      require('dap-python').test_runner = 'pytest'
     end
   },
   {
@@ -242,30 +238,6 @@ require('lazy').setup({
       require("dapui").setup()
     end
   },
-  {
-    'nvim-neotest/neotest',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'nvim-treesitter/nvim-treesitter',
-      'antoinemadec/FixCursorHold.nvim',
-      'nvim-neotest/neotest-python'
-    },
-    config = function()
-      require('neotest').setup({
-        adapters = {
-          require('neotest-python')({
-            dap = { justMyCode = false },
-          })
-        }
-      })
-    end
-  },
-  {
-
-  },
-
-
-
   -- NOTE: The import below automatically adds your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
   --    up-to-date with whatever is in the kickstart repo.
@@ -344,6 +316,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 -- See `:help telescope` and `:help telescope.setup()`
 require('telescope').setup {
   defaults = {
+    -- file_ignore_patterns = { "node_modules", "target", "build" },
     mappings = {
       i = {
         ['<C-u>'] = false,
@@ -499,7 +472,6 @@ local servers = {
   -- clangd = {},
   -- gopls = {},
   -- pyright = {},
-  -- rust_analyzer = {},
   -- tsserver = {},
 
   lua_ls = {
@@ -533,6 +505,28 @@ mason_lspconfig.setup_handlers {
     }
   end,
 }
+
+-- rust-tools config
+local rt = require('rust-tools')
+
+local extension_path = vim.env.HOME .. '/.vscode/extensions/vadimcn.vscode-lldb-1.9.1/'
+local codelldb_path = extension_path .. 'adapter/codelldb'
+local liblldb_path = extension_path .. 'lldb/lib/liblldb'
+local this_os = vim.loop.os_uname().sysname;
+
+-- The path in windows is different
+liblldb_path = liblldb_path .. (this_os == "Linux" and ".so" or ".dylib")
+
+rt.setup({
+  server = {
+    on_attach = on_attach,
+    capabilities = capabilities
+  },
+  dap = {
+    adapter = require('rust-tools.dap').get_codelldb_adapter(
+      codelldb_path, liblldb_path)
+  }
+})
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
@@ -582,35 +576,36 @@ cmp.setup {
 }
 
 
--- rust tools setup
-local rt = require("rust-tools")
-
-rt.setup({
-  server = {
-    on_attach = function(_, bufnr)
-      -- Hover actions
-      vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
-      -- Code action groups
-      vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
-    end,
-  },
-})
+-- put current date
+vim.api.nvim_create_user_command("Now", ":pu=strftime(\'%c\')", { desc = "Drop current date in text" })
 
 -- doge docsting keymaps
 vim.keymap.set("n", "<leader>doc", ":DogeGenerate")
 
 -- debugging keymaps
-vim.keymap.set("n", "<F5>", ":lua require'dap'.continue()<CR>") -- might remove the buffer option later
+vim.keymap.set("n", "<F5>", ":lua require'dap'.continue()<CR>")
 vim.keymap.set("n", "<F10>", ":lua require'dap'.step_over()<CR>")
-vim.keymap.set("n", "<F11>", ":lua require'dap'.step_into()<CR>")
-vim.keymap.set("n", "<F12>", ":lua require'dap'.step_out()<CR>")
+vim.keymap.set("n", "<F2>", ":lua require'dap'.step_into()<CR>")
+vim.keymap.set("n", "<F3>", ":lua require'dap'.step_out()<CR>")
 vim.keymap.set("n", "<leader>b", ":lua require'dap'.toggle_breakpoint()<CR>")
 vim.keymap.set("n", "<leader>B", ":lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition '))<CR>")
 vim.keymap.set("n", "<leader>lp",
   ":lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>")
 vim.keymap.set("n", "<leader>dr", ":lua require'dap'.repl.open()<CR>")
+-- python debug
+vim.keymap.set("n", "<leader>dpt", ":lua require('dap-python').test_method()<CR>")
+
+-- command to toggle dapui
+vim.api.nvim_create_user_command("Debug", ":lua require(\"dapui\").toggle()", { desc = "Toggle dapui" })
 
 vim.cmd("colorscheme vichr")
+
+
+vim.keymap.set("x", "<leader>p", [["_dP]])
+
+
+
+
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

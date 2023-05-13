@@ -6,4 +6,4 @@ export WORKON_HOME="$HOME/.virtualenvs"
 
 
 alias vim="nvim"
-
+alias tat="tmux a -t"
