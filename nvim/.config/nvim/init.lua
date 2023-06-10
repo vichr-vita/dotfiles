@@ -4,7 +4,6 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
-
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
@@ -32,31 +31,9 @@ require('lazy').setup({
   -- Git related plugins
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
-  'rbong/vim-flog',
+
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
-  'rktjmp/lush.nvim',
-  'jiangmiao/auto-pairs',
-  {
-    'github/copilot.vim',
-    config = function()
-      vim.g.copilot_no_tab_map = true
-      vim.api.nvim_set_keymap("i", "<C-J>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
-      vim.g.copilot_filetypes = {
-        ["*"] = false,
-        ["javascript"] = true,
-        ["typescript"] = true,
-        ["lua"] = false,
-        ["rust"] = true,
-        ["c"] = true,
-        ["c#"] = true,
-        ["c++"] = true,
-        ["go"] = true,
-        ["python"] = true,
-        ["svelte"] = true,
-      }
-    end,
-  },
 
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
@@ -80,7 +57,17 @@ require('lazy').setup({
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
-    dependencies = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' },
+    dependencies = {
+      -- Snippet Engine & its associated nvim-cmp source
+      'L3MON4D3/LuaSnip',
+      'saadparwaiz1/cmp_luasnip',
+
+      -- Adds LSP completion capabilities
+      'hrsh7th/cmp-nvim-lsp',
+
+      -- Adds a number of user-friendly snippets
+      'rafamadriz/friendly-snippets',
+    },
   },
 
   -- Useful plugin to show you pending keybinds.
@@ -97,61 +84,14 @@ require('lazy').setup({
         topdelete = { text = '‾' },
         changedelete = { text = '~' },
       },
+      on_attach = function(bufnr)
+        vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk,
+          { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
+        vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
+        vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
+      end,
     },
   },
-
-  {
-    'simrat39/rust-tools.nvim',
-    ft = 'rust',
-    dependencies = 'neovim/nvim-lspconfig'
-  },
-
-  {
-    "catppuccin/nvim",
-    name = "catppuccin",
-    config = function()
-      require("catppuccin").setup {
-        flavour = "mocha", -- latte, frappe, macchiato, mocha
-        term_colors = true,
-        transparent_background = false,
-        no_italic = false,
-        no_bold = false,
-        styles = {
-          comments = {},
-          conditionals = {},
-          loops = {},
-          functions = {},
-          keywords = {},
-          strings = {},
-          variables = {},
-          numbers = {},
-          booleans = {},
-          properties = {},
-          types = {},
-        },
-        color_overrides = {
-          mocha = {
-            base = "#000000",
-            mantle = "#000000",
-            crust = "#000000",
-          },
-        },
-        highlight_overrides = {
-          mocha = function(C)
-            return {
-              TabLineSel = { bg = C.pink },
-              CmpBorder = { fg = C.surface2 },
-              Pmenu = { bg = C.none },
-              TelescopeBorder = { link = "FloatBorder" },
-            }
-          end,
-        },
-      }
-
-      vim.cmd.colorscheme "catppuccin"
-    end,
-  },
-
 
   {
     -- Set lualine as statusline
@@ -182,7 +122,7 @@ require('lazy').setup({
   { 'numToStr/Comment.nvim',         opts = {} },
 
   -- Fuzzy Finder (files, lsp, etc)
-  { 'nvim-telescope/telescope.nvim', version = '*', dependencies = { 'nvim-lua/plenary.nvim' } },
+  { 'nvim-telescope/telescope.nvim', branch = '0.1.x', dependencies = { 'nvim-lua/plenary.nvim' } },
 
   -- Fuzzy Finder Algorithm which requires local dependencies to be built.
   -- Only load if `make` is available. Make sure you have the system
@@ -203,61 +143,32 @@ require('lazy').setup({
     dependencies = {
       'nvim-treesitter/nvim-treesitter-textobjects',
     },
-    build = ":TSUpdate",
+    build = ':TSUpdate',
   },
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
   require 'kickstart.plugins.autoformat',
+  require 'kickstart.plugins.debug',
 
-
-  -- require 'kickstart.plugins.debug',
-
-  {
-    'kkoomen/vim-doge',
-    config = function()
-      vim.g.doge_doc_standard_python = 'google'
-      vim.g.doge_python_settings = {
-        single_quotes = 0,
-        omit_redundant_param_types = 1
-      }
-    end
-  },
-  'mfussenegger/nvim-dap',
-  {
-    'mfussenegger/nvim-dap-python',
-    config = function()
-      require('dap-python').setup('~/.virtualenvs/debugpy/bin/python')
-      require('dap-python').test_runner = 'pytest'
-    end
-  },
-  {
-    'rcarriga/nvim-dap-ui',
-    config = function()
-      require("dapui").setup()
-    end
-  },
   -- NOTE: The import below automatically adds your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
   --    up-to-date with whatever is in the kickstart repo.
   --
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
-  --
-  --    An additional note is that if you only copied in the `init.lua`, you can just comment this line
-  --    to get rid of the warning telling you that there are not plugins in `lua/custom/plugins/`.
   { import = 'custom.plugins' },
 }, {})
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
+-- NOTE: You can change these options as you wish!
 
 -- Set highlight on search
 vim.o.hlsearch = false
 
 -- Make line numbers default
 vim.wo.number = true
-vim.wo.relativenumber = true
 
 -- Enable mouse mode
 vim.o.mouse = 'a'
@@ -316,13 +227,12 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 -- See `:help telescope` and `:help telescope.setup()`
 require('telescope').setup {
   defaults = {
-    -- file_ignore_patterns = { "node_modules", "target", "build" },
     mappings = {
       i = {
         ['<C-u>'] = false,
         ['<C-d>'] = false,
       },
-    },
+    }
   },
 }
 
@@ -340,6 +250,7 @@ vim.keymap.set('n', '<leader>/', function()
   })
 end, { desc = '[/] Fuzzily search in current buffer' })
 
+vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
 vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
@@ -350,13 +261,13 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'vimdoc', 'vim', 'svelte', 'toml' },
+  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'vimdoc', 'vim' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
 
   highlight = { enable = true },
-  indent = { enable = true, disable = { 'python' } },
+  indent = { enable = true },
   incremental_selection = {
     enable = true,
     keymaps = {
@@ -413,12 +324,12 @@ require('nvim-treesitter.configs').setup {
 }
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic message" })
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = "Go to next diagnostic message" })
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
--- LSP settings.
+-- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
@@ -471,7 +382,8 @@ end
 local servers = {
   -- clangd = {},
   -- gopls = {},
-  -- pyright = {},
+  pyright = {},
+  -- rust_analyzer = {},
   -- tsserver = {},
 
   lua_ls = {
@@ -506,32 +418,11 @@ mason_lspconfig.setup_handlers {
   end,
 }
 
--- rust-tools config
-local rt = require('rust-tools')
-
-local extension_path = vim.env.HOME .. '/.vscode/extensions/vadimcn.vscode-lldb-1.9.1/'
-local codelldb_path = extension_path .. 'adapter/codelldb'
-local liblldb_path = extension_path .. 'lldb/lib/liblldb'
-local this_os = vim.loop.os_uname().sysname;
-
--- The path in windows is different
-liblldb_path = liblldb_path .. (this_os == "Linux" and ".so" or ".dylib")
-
-rt.setup({
-  server = {
-    on_attach = on_attach,
-    capabilities = capabilities
-  },
-  dap = {
-    adapter = require('rust-tools.dap').get_codelldb_adapter(
-      codelldb_path, liblldb_path)
-  }
-})
-
--- nvim-cmp setup
+-- [[ Configure nvim-cmp ]]
+-- See `:help cmp`
 local cmp = require 'cmp'
 local luasnip = require 'luasnip'
-
+require('luasnip.loaders.from_vscode').lazy_load()
 luasnip.config.setup {}
 
 cmp.setup {
@@ -541,6 +432,8 @@ cmp.setup {
     end,
   },
   mapping = cmp.mapping.preset.insert {
+    ['<C-n>'] = cmp.mapping.select_next_item(),
+    ['<C-p>'] = cmp.mapping.select_prev_item(),
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete {},
@@ -551,7 +444,7 @@ cmp.setup {
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
+      elseif luasnip.expand_or_locally_jumpable() then
         luasnip.expand_or_jump()
       else
         fallback()
@@ -560,7 +453,7 @@ cmp.setup {
     ['<S-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
+      elseif luasnip.locally_jumpable(-1) then
         luasnip.jump(-1)
       else
         fallback()
@@ -571,41 +464,13 @@ cmp.setup {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
   },
-
-
 }
-
-
--- put current date
-vim.api.nvim_create_user_command("Now", ":pu=strftime(\'%c\')", { desc = "Drop current date in text" })
-
--- doge docsting keymaps
-vim.keymap.set("n", "<leader>doc", ":DogeGenerate")
-
--- debugging keymaps
-vim.keymap.set("n", "<F5>", ":lua require'dap'.continue()<CR>")
-vim.keymap.set("n", "<F10>", ":lua require'dap'.step_over()<CR>")
-vim.keymap.set("n", "<F2>", ":lua require'dap'.step_into()<CR>")
-vim.keymap.set("n", "<F3>", ":lua require'dap'.step_out()<CR>")
-vim.keymap.set("n", "<leader>b", ":lua require'dap'.toggle_breakpoint()<CR>")
-vim.keymap.set("n", "<leader>B", ":lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition '))<CR>")
-vim.keymap.set("n", "<leader>lp",
-  ":lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>")
-vim.keymap.set("n", "<leader>dr", ":lua require'dap'.repl.open()<CR>")
--- python debug
-vim.keymap.set("n", "<leader>dpt", ":lua require('dap-python').test_method()<CR>")
-
--- command to toggle dapui
-vim.api.nvim_create_user_command("Debug", ":lua require(\"dapui\").toggle()", { desc = "Toggle dapui" })
-
-vim.cmd("colorscheme vichr")
-
-
-vim.keymap.set("x", "<leader>p", [["_dP]])
-
-
-
-
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+-- Custom user commands
+vim.api.nvim_create_user_command("Now", ":pu=strftime(\'%c\')", { desc = "Drop current date in text" })
+
+-- Custom colorscheme
+vim.cmd("colorscheme vichr")
