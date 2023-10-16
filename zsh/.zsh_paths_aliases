@@ -7,3 +7,9 @@ export WORKON_HOME="$HOME/.virtualenvs"
 
 alias vim="nvim"
 alias tat="tmux a -t"
+
+alias clippity="cargo clippy --fix -- \
+-W clippy::pedantic \
+-W clippy::nursery \
+-W clippy::unwrap_used \
+-W clippy::expect_used"
