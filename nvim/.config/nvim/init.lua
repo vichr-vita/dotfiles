@@ -327,6 +327,7 @@ local servers = {
   -- clangd = {},
   -- gopls = {},
   pyright = {},
+  ruff_lsp = {},
   -- tsserver = {},
   rust_analyzer = {
     ["rust-analyzer"] = {
