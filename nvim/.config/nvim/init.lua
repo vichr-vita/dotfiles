@@ -250,7 +250,7 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'vimdoc', 'vim' },
+  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'vimdoc', 'vim', 'sql' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
@@ -328,6 +328,7 @@ local servers = {
   -- clangd = {},
   -- gopls = {},
   pyright = {},
+  ruff_lsp = {},
   -- tsserver = {},
   rust_analyzer = {
     ["rust-analyzer"] = {
@@ -375,5 +376,10 @@ mason_lspconfig.setup_handlers {
 -- Custom user commands
 vim.api.nvim_create_user_command("Now", ":pu=strftime(\'%c\')", { desc = "Drop current date in text" })
 
+
 -- Custom colorscheme
 vim.cmd("colorscheme vichr")
+-- vim.cmd("colorscheme christmas")
+--
+-- todo: move to set
+vim.opt.colorcolumn = "80"
