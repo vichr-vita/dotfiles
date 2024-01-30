@@ -380,7 +380,6 @@ vim.api.nvim_create_user_command("Now", ":pu=strftime(\'%c\')", { desc = "Drop c
 
 -- Custom colorscheme
 vim.cmd("colorscheme vichr")
--- vim.cmd("colorscheme christmas")
 --
 -- todo: move to set
 vim.opt.colorcolumn = "80"
