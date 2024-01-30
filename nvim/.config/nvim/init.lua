@@ -386,3 +386,6 @@ vim.opt.colorcolumn = "80"
 
 -- tab character will look as n spaces
 vim.opt.tabstop = 2
+
+
+vim.opt.conceallevel = 1
