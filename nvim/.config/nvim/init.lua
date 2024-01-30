@@ -380,6 +380,9 @@ vim.api.nvim_create_user_command("Now", ":pu=strftime(\'%c\')", { desc = "Drop c
 
 -- Custom colorscheme
 vim.cmd("colorscheme vichr")
---
+
 -- todo: move to set
 vim.opt.colorcolumn = "80"
+
+-- tab character will look as n spaces
+vim.opt.tabstop = 2
