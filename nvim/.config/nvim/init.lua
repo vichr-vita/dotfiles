@@ -376,6 +376,7 @@ mason_lspconfig.setup_handlers {
 
 -- Custom user commands
 vim.api.nvim_create_user_command("Now", ":pu=strftime(\'%c\')", { desc = "Drop current date in text" })
+vim.api.nvim_create_user_command("Shruggie", "put =\'¯\\_(ツ)_/¯\'", { desc = "Insert a shruggie emoticon" })
 
 
 -- Custom colorscheme
