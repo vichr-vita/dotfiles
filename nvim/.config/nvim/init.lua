@@ -330,7 +330,6 @@ local servers = {
   -- gopls = {},
   pyright = {},
   ruff_lsp = {},
-  -- tsserver = {},
   rust_analyzer = {
     ["rust-analyzer"] = {
       checkOnSave = {
@@ -344,6 +343,9 @@ local servers = {
       telemetry = { enable = false },
     },
   },
+  tsserver = {},
+  eslint = {},
+  -- prettier needs to be installed separately - I don't know how to automatically install with mason
 }
 
 -- Setup neovim lua configuration
@@ -377,6 +379,7 @@ mason_lspconfig.setup_handlers {
 -- Custom user commands
 vim.api.nvim_create_user_command("Now", ":pu=strftime(\'%c\')", { desc = "Drop current date in text" })
 vim.api.nvim_create_user_command("Shruggie", "put =\'¯\\_(ツ)_/¯\'", { desc = "Insert a shruggie emoticon" })
+
 
 
 -- Custom colorscheme
