@@ -46,12 +46,18 @@ require('lazy').setup({
     'neovim/nvim-lspconfig',
     dependencies = {
       -- Automatically install LSPs to stdpath for neovim
-      { 'williamboman/mason.nvim', config = true },
+      {
+        'williamboman/mason.nvim',
+        config = true,
+        opts = {
+          ensure_installed = { "prettier" }
+        }
+      },
       'williamboman/mason-lspconfig.nvim',
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim',       opts = {} },
+      { 'j-hui/fidget.nvim', opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -344,7 +350,7 @@ local servers = {
     },
   },
   tsserver = {},
-  eslint = {},
+  -- eslint = {},
   -- prettier needs to be installed separately - I don't know how to automatically install with mason
 }
 
@@ -359,8 +365,12 @@ local capabilities = require "custom.config.cmp_config"
 local mason_lspconfig = require 'mason-lspconfig'
 -- local util = require 'lspconfig/util' -- used to be used for rust
 
+
+local to_install = vim.tbl_keys(servers)
+table.insert(to_install, "eslint")
+
 mason_lspconfig.setup {
-  ensure_installed = vim.tbl_keys(servers),
+  ensure_installed = to_install,
 }
 
 mason_lspconfig.setup_handlers {
