@@ -42,6 +42,9 @@ local on_attach = function(_, bufnr)
 		vim.lsp.buf.format()
 	end, { desc = 'Format current buffer with LSP' })
 
+	vim.api.nvim_set_keymap('n', '<leader>ff', ':Format<CR>', { noremap = true, silent = true })
+
+
 	-- rust specific TODO: this is not needed for other languages, think about rewriting it so it's executed contitionally
 	-- Hover actions
 	local rt = require("rust-tools")

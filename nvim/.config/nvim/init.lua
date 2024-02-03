@@ -50,7 +50,7 @@ require('lazy').setup({
         'williamboman/mason.nvim',
         config = true,
         opts = {
-          ensure_installed = { "prettier" }
+          ensure_installed = { "prettier", "mypy", "black" } -- non-lsp
         }
       },
       'williamboman/mason-lspconfig.nvim',
@@ -72,11 +72,13 @@ require('lazy').setup({
     opts = {
       -- See `:help gitsigns.txt`
       signs = {
-        add = { text = '+' },
-        change = { text = '~' },
-        delete = { text = '_' },
-        topdelete = { text = '‾' },
+        add          = { text = '│' },
+        change       = { text = '│' },
+        delete       = { text = '_' },
+        topdelete    = { text = '‾' },
         changedelete = { text = '~' },
+        untracked    = { text = '┆' },
+
       },
       on_attach = function(bufnr)
         vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk,
@@ -108,7 +110,7 @@ require('lazy').setup({
     -- See `:help indent_blankline.txt`
     version = "2.20.8",
     opts = {
-      char = '┊',
+      char = '│',
       show_trailing_blankline_indent = false,
     },
   },
@@ -257,7 +259,7 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 ---@diagnostic disable-next-line: missing-fields
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'vimdoc', 'vim', 'sql' },
+  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'vimdoc', 'vim', 'sql', 'html', 'css' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
@@ -350,8 +352,7 @@ local servers = {
     },
   },
   tsserver = {},
-  -- eslint = {},
-  -- prettier needs to be installed separately - I don't know how to automatically install with mason
+  eslint = {},
 }
 
 -- Setup neovim lua configuration
@@ -366,11 +367,8 @@ local mason_lspconfig = require 'mason-lspconfig'
 -- local util = require 'lspconfig/util' -- used to be used for rust
 
 
-local to_install = vim.tbl_keys(servers)
-table.insert(to_install, "eslint")
-
 mason_lspconfig.setup {
-  ensure_installed = to_install,
+  ensure_installed = vim.tbl_keys(servers),
 }
 
 mason_lspconfig.setup_handlers {
@@ -390,16 +388,33 @@ mason_lspconfig.setup_handlers {
 vim.api.nvim_create_user_command("Now", ":pu=strftime(\'%c\')", { desc = "Drop current date in text" })
 vim.api.nvim_create_user_command("Shruggie", "put =\'¯\\_(ツ)_/¯\'", { desc = "Insert a shruggie emoticon" })
 
+vim.api.nvim_set_keymap('n', '<leader>tz', ':ZenMode<CR>', { noremap = true, silent = true })
 
 
 -- Custom colorscheme
-vim.cmd("colorscheme vichr")
+-- vim.cmd("colorscheme vichr")
+---@diagnostic disable-next-line: missing-fields
+require("catppuccin").setup({
+  flavour = "mocha",             -- latte, frappe, macchiato, mocha
+  transparent_background = true, -- disables setting the background color.
+  show_end_of_buffer = false,    -- shows the '~' characters after the end of buffers
+  term_colors = true,            -- sets terminal colors (e.g. `g:terminal_color_0`)
+  dim_inactive = {
+    enabled = false,             -- dims the background color of inactive window
+    shade = "dark",
+    percentage = 0.15,           -- percentage of the shade to apply to the inactive window
+  },
+  color_overrides = {},
+})
+
+vim.cmd.colorscheme "catppuccin"
+
 
 -- todo: move to set
 vim.opt.colorcolumn = "80"
 
 -- tab character will look as n spaces
-vim.opt.tabstop = 2
+-- vim.opt.tabstop = 2
 
 
 vim.opt.conceallevel = 1

@@ -7,12 +7,16 @@ return {
   'neovim/nvim-lspconfig',
   config = function()
     -- Switch for controlling whether you want autoformatting.
-    --  Use :KickstartFormatToggle to toggle autoformatting on or off
+    --  Use :FormatOnSaveToggle to toggle autoformatting on or off
     local format_is_enabled = true
-    vim.api.nvim_create_user_command('KickstartFormatToggle', function()
+
+    vim.api.nvim_create_user_command('FormatOnSaveToggle', function()
       format_is_enabled = not format_is_enabled
       print('Setting autoformatting to: ' .. tostring(format_is_enabled))
     end, {})
+
+    vim.api.nvim_set_keymap('n', '<leader>ft', ':FormatOnSaveToggle<CR>', { noremap = true, silent = true })
+
 
     -- Create an augroup that is used for managing our formatting autocmds.
     --      We need one augroup per client to make sure that multiple clients
@@ -39,6 +43,7 @@ return {
         local client = vim.lsp.get_client_by_id(client_id)
         local bufnr = args.buf
 
+
         -- Only attach to clients that support document formatting
         if not client.server_capabilities.documentFormattingProvider then
           return
@@ -49,6 +54,7 @@ return {
         if client.name == 'tsserver' then
           return
         end
+
 
         -- Create an autocmd that will run *before* we save the buffer.
         --  Run the formatting command for the LSP that has just attached.
