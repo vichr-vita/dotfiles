@@ -5,6 +5,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.wo.relativenumber = true
 
+
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
@@ -95,10 +96,10 @@ require('lazy').setup({
     -- See `:help lualine.txt`
     opts = {
       options = {
-        icons_enabled = false,
-        theme = 'onedark',
-        component_separators = '|',
-        section_separators = '',
+        icons_enabled = true,
+        theme = 'catppuccin',
+        -- component_separators = '|',
+        -- section_separators = '',
       },
     },
   },
@@ -405,9 +406,16 @@ require("catppuccin").setup({
     percentage = 0.15,           -- percentage of the shade to apply to the inactive window
   },
   color_overrides = {},
+  ---@diagnostic disable-next-line: missing-fields
+  integrations = {
+    cmp = true,
+    gitsigns = true,
+    treesitter = true,
+    notify = false,
+  }
 })
 
-vim.cmd.colorscheme "catppuccin"
+vim.cmd "colorscheme catppuccin"
 
 
 -- todo: move to set
