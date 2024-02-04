@@ -58,7 +58,17 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
+      {
+        'j-hui/fidget.nvim',
+        opts = {
+          notification = {
+            window = {
+              winblend = 0
+            }
+          }
+        }
+      },
+
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -422,7 +432,10 @@ vim.cmd "colorscheme catppuccin"
 vim.opt.colorcolumn = "80"
 
 -- tab character will look as n spaces
--- vim.opt.tabstop = 2
+vim.opt.tabstop = 2
 
 
 vim.opt.conceallevel = 1
+
+-- global status bar
+vim.opt.laststatus = 3
