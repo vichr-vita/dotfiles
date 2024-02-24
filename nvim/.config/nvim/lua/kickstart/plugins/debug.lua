@@ -82,8 +82,8 @@ return {
     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
 
-    -- Install golang specific config
-    require('dap-python').setup('~/.virtualenvs/debugpy/bin/python')
+    -- Install python specific config
+    require('dap-python').setup('~/.local/share/nvim/mason/packages/debugpy/venv/bin/python')
 
     vim.api.nvim_create_user_command("PyDebugTest", ":lua require('dap-python').test_method()",
       { desc = "Debug the closest method above the cursor." })

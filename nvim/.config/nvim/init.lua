@@ -53,7 +53,7 @@ require('lazy').setup({
         'williamboman/mason.nvim',
         config = true,
         opts = {
-          ensure_installed = { "prettier", "mypy", "black" } -- non-lsp
+          ensure_installed = { "prettier", "mypy", "black", "debugpy" } -- non-lsp
         }
       },
       'williamboman/mason-lspconfig.nvim',
@@ -400,6 +400,7 @@ vim.api.nvim_create_user_command("Now", ":pu=strftime(\'%c\')", { desc = "Drop c
 vim.api.nvim_create_user_command("Shruggie", "put =\'¯\\_(ツ)_/¯\'", { desc = "Insert a shruggie emoticon" })
 
 vim.api.nvim_set_keymap('n', '<leader>tz', ':ZenMode<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>doc', ':Neogen<CR>', { noremap = true, silent = true })
 
 
 -- Custom colorscheme
