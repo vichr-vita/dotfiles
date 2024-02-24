@@ -346,13 +346,13 @@ local servers = {
   -- gopls = {},
   pyright = {},
   ruff_lsp = {},
-  rust_analyzer = {
-    ["rust-analyzer"] = {
-      checkOnSave = {
-        command = "clippy",
-      },
-    },
-  },
+  -- rust_analyzer = {
+  --   ["rust-analyzer"] = {
+  --     checkOnSave = {
+  --       command = "clippy",
+  --     },
+  --   },
+  -- },
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
@@ -372,7 +372,6 @@ local capabilities = require "custom.config.cmp_config"
 
 -- Ensure the servers above are installed
 local mason_lspconfig = require 'mason-lspconfig'
--- local util = require 'lspconfig/util' -- used to be used for rust
 
 
 mason_lspconfig.setup {
@@ -381,6 +380,10 @@ mason_lspconfig.setup {
 
 mason_lspconfig.setup_handlers {
   function(server_name)
+    if server_name == "rust_analyzer" then
+      print("rust_analyzer")
+      return
+    end
     require('lspconfig')[server_name].setup {
       capabilities = capabilities,
       on_attach = on_attach,

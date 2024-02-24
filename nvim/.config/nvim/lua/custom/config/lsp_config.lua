@@ -47,10 +47,10 @@ local on_attach = function(_, bufnr)
 
 	-- rust specific TODO: this is not needed for other languages, think about rewriting it so it's executed contitionally
 	-- Hover actions
-	local rt = require("rust-tools")
-	vim.keymap.set("n", "<Leader>k", rt.hover_actions.hover_actions, { buffer = bufnr })
+	-- local rt = require("rust-tools")
+	-- vim.keymap.set("n", "<Leader>k", rt.hover_actions.hover_actions, { buffer = bufnr })
 	-- Code action groups
-	vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+	-- vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
 end
 
 
