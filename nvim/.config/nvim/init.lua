@@ -53,7 +53,7 @@ require('lazy').setup({
         'williamboman/mason.nvim',
         config = true,
         opts = {
-          ensure_installed = { "prettier", "mypy", "black", "debugpy" } -- non-lsp
+          ensure_installed = { "prettier", "black", "debugpy" } -- non-lsp
         }
       },
       'williamboman/mason-lspconfig.nvim',
