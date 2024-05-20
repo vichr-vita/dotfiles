@@ -53,6 +53,14 @@ cmp.setup({
       }
     }
   },
+  { name = 'buffer' }
+})
+
+cmp.setup.filetype({ 'sql' }, {
+  sources = {
+    { name = 'vim-dadbod-completion' },
+    { name = 'buffer' }
+  }
 })
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
