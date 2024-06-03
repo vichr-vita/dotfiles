@@ -69,7 +69,6 @@ export VIRTUALENVWRAPPER_PYTHON=$(which python3)
 #
 #
 
-source ~/.zsh_paths_aliases
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
@@ -80,8 +79,9 @@ plugins=(
 	virtualenvwrapper
 )
 
-source ~/.zsh_profile
 source $ZSH/oh-my-zsh.sh
+source ~/.zsh_profile
+source ~/.zsh_paths_aliases
 
 # User configuration
 
