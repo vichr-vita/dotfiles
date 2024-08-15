@@ -49,6 +49,9 @@ end, { desc = 'Format current buffer with LSP' })
 
 vim.api.nvim_set_keymap('n', '<leader>fm', ':Format<CR>', { noremap = true, silent = true })
 
+vim.api.nvim_buf_create_user_command(bufnr, 'IHToggle', function(_)
+	vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+end, { desc = 'Format current buffer with LSP' })
 
 -- vim.lsp.inlay_hint.enable(bufnr, true)
 

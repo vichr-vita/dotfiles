@@ -15,7 +15,9 @@ local on_attach = function(_, bufnr)
 		vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
 	end
 
-	nmap('<leader>iht', vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()), '[I]nlay [H]ints [T]oggle')
+
+
+
 
 	nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
 	nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
@@ -42,6 +44,11 @@ local on_attach = function(_, bufnr)
 	-- Create a command `:Format` local to the LSP buffer
 	vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
 		vim.lsp.buf.format()
+	end, { desc = 'Format current buffer with LSP' })
+
+
+	vim.api.nvim_buf_create_user_command(bufnr, 'IHToggle', function(_)
+		vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 	end, { desc = 'Format current buffer with LSP' })
 
 	vim.api.nvim_set_keymap('n', '<leader>fm', ':Format<CR>', { noremap = true, silent = true })
