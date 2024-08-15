@@ -20,6 +20,9 @@ vim.keymap.set(
 	{ silent = true, buffer = bufnr, desc = '(Rust) [C]ode [A]ction' }
 )
 
+vim.lsp.inlay_hint.enable(true)
+
+
 nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
 nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
 nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
@@ -46,6 +49,8 @@ end, { desc = 'Format current buffer with LSP' })
 
 vim.api.nvim_set_keymap('n', '<leader>fm', ':Format<CR>', { noremap = true, silent = true })
 
+
+-- vim.lsp.inlay_hint.enable(bufnr, true)
 
 -- rust specific TODO: this is not needed for other languages, think about rewriting it so it's executed contitionally
 -- Hover actions

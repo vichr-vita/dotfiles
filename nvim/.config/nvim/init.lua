@@ -403,9 +403,9 @@ vim.api.nvim_set_keymap('n', '<leader>tz', ':ZenMode<CR>', { noremap = true, sil
 vim.api.nvim_set_keymap('n', '<leader>doc', ':Neogen<CR>', { noremap = true, silent = true })
 
 
--- Custom colorscheme
--- vim.cmd("colorscheme vichr")
----@diagnostic disable-next-line: missing-fields
+-- -- Custom colorscheme
+-- -- vim.cmd("colorscheme vichr")
+-- ---@diagnostic disable-next-line: missing-fields
 require("catppuccin").setup({
   flavour = "mocha",             -- latte, frappe, macchiato, mocha
   transparent_background = true, -- disables setting the background color.

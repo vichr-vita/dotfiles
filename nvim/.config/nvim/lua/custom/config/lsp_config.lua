@@ -15,6 +15,8 @@ local on_attach = function(_, bufnr)
 		vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
 	end
 
+	nmap('<leader>iht', vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()), '[I]nlay [H]ints [T]oggle')
+
 	nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
 	nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
