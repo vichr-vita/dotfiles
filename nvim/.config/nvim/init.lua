@@ -230,7 +230,9 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
-require('telescope').setup {
+--
+
+local telescope_default_config = {
   defaults = {
     mappings = {
       i = {
@@ -240,6 +242,39 @@ require('telescope').setup {
     }
   },
 }
+
+-- Merge tables
+local function merge(t1, t2)
+  for k, v in pairs(t2) do
+    if (type(v) == "table") and (type(t1[k] or false) == "table") then
+      merge(t1[k], t2[k])
+    else
+      t1[k] = v
+    end
+  end
+  return t1
+end
+
+
+-- Load project-specific Telescope configuration
+local function load_project_config()
+  local project_config = vim.fn.getcwd() .. '/.telescope.lua'
+  if vim.fn.filereadable(project_config) == 1 then
+    local config = dofile(project_config)
+    return config
+  end
+  return {}
+end
+
+
+
+-- Override Telescope configuration with project-specific settings
+local telescope_project_config = load_project_config()
+local final_config = merge(telescope_default_config, telescope_project_config)
+-- print("Telescope configuration:")
+-- print(vim.inspect(final_config))
+require('telescope').setup(final_config)
+
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
