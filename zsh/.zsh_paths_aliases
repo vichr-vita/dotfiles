@@ -14,3 +14,7 @@ alias clippity="cargo clippy --fix -- \
 -W clippy::nursery \
 -W clippy::unwrap_used \
 -W clippy::expect_used"
+
+
+alias ls="lsd"
+alias act="source ./venv/bin/activate"
