@@ -235,6 +235,10 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 local telescope_default_config = {
   defaults = {
+    file_ignore_patterns = {
+      "node_modules",
+      ".git"
+    },
     mappings = {
       i = {
         ['<C-u>'] = false,
@@ -242,6 +246,11 @@ local telescope_default_config = {
       },
     }
   },
+  pickers = {
+    find_files = {
+      hidden = true
+    }
+  }
 }
 
 -- Merge tables
@@ -417,7 +426,6 @@ mason_lspconfig.setup {
 mason_lspconfig.setup_handlers {
   function(server_name)
     if server_name == "rust_analyzer" then
-      print("rust_analyzer")
       return
     end
     require('lspconfig')[server_name].setup {
