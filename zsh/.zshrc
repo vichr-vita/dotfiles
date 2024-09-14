@@ -77,7 +77,6 @@ export VIRTUALENVWRAPPER_PYTHON=$(which python3)
 plugins=(
 	git
 	virtualenvwrapper
-	zsh-vi-mode
 )
 
 source $ZSH/oh-my-zsh.sh
