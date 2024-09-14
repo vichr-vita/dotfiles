@@ -1,3 +1,4 @@
 nvim/.config/nvim/lua/custom/config/obsidian-workspaces.lua
 tmux/.config/tmux/plugins/
 *.log
+.DS_Store
