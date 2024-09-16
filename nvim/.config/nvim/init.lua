@@ -412,6 +412,33 @@ local servers = {
 require('neodev').setup()
 
 
+-- Specify how the border looks like
+local border = {
+  { '┌', 'FloatBorder' },
+  { '─', 'FloatBorder' },
+  { '┐', 'FloatBorder' },
+  { '│', 'FloatBorder' },
+  { '┘', 'FloatBorder' },
+  { '─', 'FloatBorder' },
+  { '└', 'FloatBorder' },
+  { '│', 'FloatBorder' },
+}
+
+-- Add the border on hover and on signature help popup window
+local handlers = {
+  ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = border }),
+  ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = border }),
+}
+
+
+-- Add border to the diagnostic popup window
+vim.diagnostic.config({
+  virtual_text = {
+    prefix = '■ ', -- Could be '●', '▎', 'x', '■', , 
+  },
+  float = { border = border },
+})
+
 local on_attach = require "custom.config.lsp_config"
 local capabilities = require "custom.config.cmp_config"
 
@@ -432,6 +459,7 @@ mason_lspconfig.setup_handlers {
       capabilities = capabilities,
       on_attach = on_attach,
       settings = servers[server_name],
+      handlers = handlers,
     }
   end,
 }
@@ -471,6 +499,7 @@ require("catppuccin").setup({
 })
 
 vim.cmd "colorscheme catppuccin"
+
 
 
 -- todo: move to set
