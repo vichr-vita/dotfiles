@@ -1,5 +1,3 @@
--- TODO: diagnostics rice
-
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
@@ -53,7 +51,7 @@ require('lazy').setup({
         'williamboman/mason.nvim',
         config = true,
         opts = {
-          ensure_installed = { "prettier", "black", "debugpy" } -- non-lsp
+          ensure_installed = { "prettier", "black", "debugpy", "pylint" } -- non-lsp
         }
       },
       'williamboman/mason-lspconfig.nvim',
@@ -388,16 +386,17 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
   -- clangd = {},
-  -- gopls = {},
+  gopls = {
+    gopls = {
+      analyses = {
+        unusedparams = true,
+      },
+      staticcheck = true,
+      -- gofumpt = true,
+    },
+
+  },
   pyright = {},
-  ruff_lsp = {},
-  -- rust_analyzer = {
-  --   ["rust-analyzer"] = {
-  --     checkOnSave = {
-  --       command = "clippy",
-  --     },
-  --   },
-  -- },
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
@@ -464,8 +463,40 @@ mason_lspconfig.setup_handlers {
   end,
 }
 
+local function set_filetype(pattern, filetype)
+  vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+    pattern = pattern,
+    command = "set filetype=" .. filetype,
+  })
+end
+
+set_filetype({ "docker-compose.yml" }, "yaml.docker-compose")
+set_filetype({ "compose.yml" }, "yaml.docker-compose")
+set_filetype({ "compose.yaml" }, "yaml.docker-compose")
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+--
+--
+
+-- local lsp dev test code
+-- local client = vim.lsp.start_client {
+--   name = "educationalsp",
+--   cmd = { "/Users/vitchrubasik/projects/learn-lsp/learn-lsp" },
+--   on_attach = require("custom.config.lsp_config"),
+-- }
+--
+-- if not client then
+--   vim.notify "client is no good"
+-- else
+--   vim.api.nvim_create_autocmd("FileType", {
+--     pattern = "markdown",
+--     callback = function()
+--       vim.lsp.buf_attach_client(0, client)
+--     end
+--   })
+-- end
+
 
 -- Custom user commands
 vim.api.nvim_create_user_command("Now", ":pu=strftime(\'%c\')", { desc = "Drop current date in text" })
@@ -475,30 +506,6 @@ vim.api.nvim_set_keymap('n', '<leader>tz', ':ZenMode<CR>', { noremap = true, sil
 vim.api.nvim_set_keymap('n', '<leader>doc', ':Neogen<CR>', { noremap = true, silent = true })
 
 
--- -- Custom colorscheme
--- -- vim.cmd("colorscheme vichr")
--- ---@diagnostic disable-next-line: missing-fields
-require("catppuccin").setup({
-  flavour = "mocha",             -- latte, frappe, macchiato, mocha
-  transparent_background = true, -- disables setting the background color.
-  show_end_of_buffer = false,    -- shows the '~' characters after the end of buffers
-  term_colors = true,            -- sets terminal colors (e.g. `g:terminal_color_0`)
-  dim_inactive = {
-    enabled = false,             -- dims the background color of inactive window
-    shade = "dark",
-    percentage = 0.15,           -- percentage of the shade to apply to the inactive window
-  },
-  color_overrides = {},
-  ---@diagnostic disable-next-line: missing-fields
-  integrations = {
-    cmp = true,
-    gitsigns = true,
-    treesitter = true,
-    notify = false,
-  }
-})
-
-vim.cmd "colorscheme catppuccin"
 
 
 
@@ -513,3 +520,7 @@ vim.opt.conceallevel = 1
 
 -- global status bar
 vim.opt.laststatus = 3
+
+
+-- vim.opt.guicursor =
+-- "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,sm:block"

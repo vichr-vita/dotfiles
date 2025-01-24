@@ -5,11 +5,9 @@ local luasnip = require 'luasnip'
 require('luasnip.loaders.from_vscode').lazy_load()
 luasnip.config.setup {}
 
----@diagnostic disable-next-line: missing-fields
 cmp.setup({
   window = {
     completion = cmp.config.window.bordered(),
-    documentation = cmp.config.window.bordered(),
   },
 
   snippet = {
@@ -47,7 +45,9 @@ cmp.setup({
     end, { 'i', 's' }),
   },
   sources = {
+    { name = "graphql" },
     { name = 'nvim_lsp' },
+    { name = 'nvim_lua' },
     { name = 'luasnip' },
     {
       name = 'path',
