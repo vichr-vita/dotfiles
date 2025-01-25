@@ -1,6 +1,7 @@
 bindkey -s "^F" "tmux-sessionizer\n"
 
 
+export PGPORT=5434
 
 function wordcount() {
     ps2ascii "$1" | wc -w

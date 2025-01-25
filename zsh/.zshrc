@@ -109,3 +109,12 @@ source ~/.zsh_paths_aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+
+# Generated for envman. Do not edit.
+[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/vitchrubasik/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/vitchrubasik/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/vitchrubasik/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/vitchrubasik/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
