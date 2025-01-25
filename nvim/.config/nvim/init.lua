@@ -403,7 +403,9 @@ local servers = {
       telemetry = { enable = false },
     },
   },
-  tsserver = {},
+  tsserver = {
+  }
+  ,
   eslint = {},
 }
 
@@ -439,7 +441,10 @@ vim.diagnostic.config({
 })
 
 local on_attach = require "custom.config.lsp_config"
-local capabilities = require "custom.config.cmp_config"
+
+
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 -- Ensure the servers above are installed
 local mason_lspconfig = require 'mason-lspconfig'
