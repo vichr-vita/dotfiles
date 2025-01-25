@@ -4,13 +4,16 @@ import = [
 ]
 
 [env]
-TERM = "xterm-256color"
+# TERM = "xterm-256color"
+# TERM = "screen-256color"
+TERM = "tmux-256color"
 
 [window]
 startup_mode = "SimpleFullscreen"
 decorations = "None"
 padding = { x = 20, y = 20 }
-opacity = 0.8
+# opacity = 0.8
+opacity = 1
 blur = true
 
 [font]
