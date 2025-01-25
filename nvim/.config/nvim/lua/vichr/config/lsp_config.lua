@@ -1,23 +1,21 @@
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
-local on_attach = function(_, bufnr)
+
+local nmap = function(keys, func, desc)
+	if desc then
+		desc = 'LSP: ' .. desc
+	end
+
+	vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
+end
+
+local common_config = function(_, bufnr)
 	-- NOTE: Remember that lua is a real programming language, and as such it is possible
 	-- to define small helper and utility functions so you don't have to repeat yourself
 	-- many times.
 	--
 	-- In this case, we create a function that lets us more easily define mappings specific
 	-- for LSP related items. It sets the mode, buffer and description for us each time.
-	local nmap = function(keys, func, desc)
-		if desc then
-			desc = 'LSP: ' .. desc
-		end
-
-		vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
-	end
-
-
-
-
 
 	nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
 	nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
@@ -52,14 +50,10 @@ local on_attach = function(_, bufnr)
 	end, { desc = 'Format current buffer with LSP' })
 
 	vim.api.nvim_set_keymap('n', '<leader>fm', ':Format<CR>', { noremap = true, silent = true })
+end
 
-
-	-- rust specific TODO: this is not needed for other languages, think about rewriting it so it's executed contitionally
-	-- Hover actions
-	-- local rt = require("rust-tools")
-	-- vim.keymap.set("n", "<Leader>k", rt.hover_actions.hover_actions, { buffer = bufnr })
-	-- Code action groups
-	-- vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+local on_attach = function(_, bufnr)
+	common_config(_, bufnr)
 end
 
 
