@@ -1,15 +1,15 @@
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
 
-local nmap = function(keys, func, desc)
-	if desc then
-		desc = 'LSP: ' .. desc
-	end
-
-	vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
-end
 
 local common_config = function(_, bufnr)
+	local nmap = function(keys, func, desc)
+		if desc then
+			desc = 'LSP: ' .. desc
+		end
+
+		vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
+	end
 	-- NOTE: Remember that lua is a real programming language, and as such it is possible
 	-- to define small helper and utility functions so you don't have to repeat yourself
 	-- many times.
@@ -41,15 +41,19 @@ local common_config = function(_, bufnr)
 
 	-- Create a command `:Format` local to the LSP buffer
 	vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-		vim.lsp.buf.format()
+		require("conform").format({ bufnr = bufnr })
+		-- vim.lsp.buf.format()
 	end, { desc = 'Format current buffer with LSP' })
 
 
 	vim.api.nvim_buf_create_user_command(bufnr, 'IHToggle', function(_)
 		vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-	end, { desc = 'Format current buffer with LSP' })
+	end, { desc = '[I]nlay [H]ints [Toggle]' })
 
 	vim.api.nvim_set_keymap('n', '<leader>fm', ':Format<CR>', { noremap = true, silent = true })
+
+
+
 end
 
 local on_attach = function(_, bufnr)

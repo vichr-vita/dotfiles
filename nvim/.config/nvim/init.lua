@@ -4,7 +4,6 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
-
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
@@ -20,9 +19,6 @@ if not vim.loop.fs_stat(lazypath) then
   }
 end
 vim.opt.rtp:prepend(lazypath)
-
-
-
 
 -- NOTE: Here is where you install your plugins.
 --  You can configure plugins using the `config` key.
@@ -47,7 +43,6 @@ require('lazy').setup({
 -- NOTE: You can change these options as you wish!
 
 vim.wo.relativenumber = true
-
 
 -- Set highlight on search
 vim.o.hlsearch = false
@@ -87,13 +82,10 @@ vim.o.completeopt = 'menuone,noselect'
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
-
-
-vim.opt.colorcolumn = "80"
+vim.opt.colorcolumn = '80'
 
 -- tab character will look as n spaces
 vim.opt.tabstop = 2
-
 
 vim.opt.conceallevel = 1
 
@@ -121,18 +113,16 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   pattern = '*',
 })
 
-
-
 local function set_filetype(pattern, filetype)
-  vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
     pattern = pattern,
-    command = "set filetype=" .. filetype,
+    command = 'set filetype=' .. filetype,
   })
 end
 
-set_filetype({ "docker-compose.yml" }, "yaml.docker-compose")
-set_filetype({ "compose.yml" }, "yaml.docker-compose")
-set_filetype({ "compose.yaml" }, "yaml.docker-compose")
+set_filetype({ 'docker-compose.yml' }, 'yaml.docker-compose')
+set_filetype({ 'compose.yml' }, 'yaml.docker-compose')
+set_filetype({ 'compose.yaml' }, 'yaml.docker-compose')
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
@@ -157,21 +147,72 @@ set_filetype({ "compose.yaml" }, "yaml.docker-compose")
 --   })
 -- end
 
-
 -- Custom user commands
-vim.api.nvim_create_user_command("Now", ":pu=strftime(\'%c\')", { desc = "Drop current date in text" })
-vim.api.nvim_create_user_command("Shruggie", "put =\'¯\\_(ツ)_/¯\'", { desc = "Insert a shruggie emoticon" })
+vim.api.nvim_create_user_command('Now', ":pu=strftime('%c')", { desc = 'Drop current date in text' })
+vim.api.nvim_create_user_command('Shruggie', "put ='¯\\_(ツ)_/¯'", { desc = 'Insert a shruggie emoticon' })
 
 vim.api.nvim_set_keymap('n', '<leader>tz', ':ZenMode<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>doc', ':Neogen<CR>', { noremap = true, silent = true })
 
+vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
 
-vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+-- [formatting]
+-- Create an augroup that is used for managing our formatting autocmds.
+--      We need one augroup per client to make sure that multiple clients
+--      can attach to the same buffer without interfering with each other.
+local _augroups = {}
+local get_augroup = function(client)
+  if not _augroups[client.id] then
+    local group_name = 'kickstart-lsp-format-' .. client.name
+    local id = vim.api.nvim_create_augroup(group_name, { clear = true })
+    _augroups[client.id] = id
+  end
 
+  return _augroups[client.id]
+end
 
+-- Whenever an LSP attaches to a buffer, we will run this function.
+--
+-- See `:help LspAttach` for more information about this autocmd event.
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('kickstart-lsp-attach-format', { clear = true }),
+  -- This is where we attach the autoformatting for reasonable clients
+  callback = function(args)
+    local client_id = args.data.client_id
+    local client = vim.lsp.get_client_by_id(client_id)
 
+    if client == nil then
+      return
+    end
 
+    -- Only attach to clients that support document formatting
+    if not client.server_capabilities.documentFormattingProvider then
+      return
+    end
 
+    -- Tsserver usually works poorly. Sorry you work with bad languages
+    -- You can remove this line if you know what you're doing :)
+    if client.name == 'tsserver' then
+      return
+    end
+
+    -- Create an autocmd that will run *before* we save the buffer.
+    --  Run the formatting command for the LSP that has just attached.
+    vim.api.nvim_create_autocmd('BufWritePre', {
+      group = get_augroup(client),
+      buffer = args.buf,
+      callback = function()
+        -- vim.lsp.buf.format {
+        --   async = false,
+        --   filter = function(c)
+        --     return c.id == client.id
+        --   end,
+        -- }
+        require('conform').format { bufnr = args.buf }
+      end,
+    })
+  end,
+})
 
 -- vim.opt.guicursor =
 -- "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,sm:block"
