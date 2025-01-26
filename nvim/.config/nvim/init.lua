@@ -195,22 +195,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     if client.name == 'tsserver' then
       return
     end
-
-    -- Create an autocmd that will run *before* we save the buffer.
-    --  Run the formatting command for the LSP that has just attached.
-    vim.api.nvim_create_autocmd('BufWritePre', {
-      group = get_augroup(client),
-      buffer = args.buf,
-      callback = function()
-        -- vim.lsp.buf.format {
-        --   async = false,
-        --   filter = function(c)
-        --     return c.id == client.id
-        --   end,
-        -- }
-        require('conform').format { bufnr = args.buf }
-      end,
-    })
   end,
 })
 
