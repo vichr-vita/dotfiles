@@ -124,79 +124,8 @@ set_filetype({ 'docker-compose.yml' }, 'yaml.docker-compose')
 set_filetype({ 'compose.yml' }, 'yaml.docker-compose')
 set_filetype({ 'compose.yaml' }, 'yaml.docker-compose')
 
--- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
---
---
-
--- local lsp dev test code
--- local client = vim.lsp.start_client {
---   name = "educationalsp",
---   cmd = { "/Users/vitchrubasik/projects/learn-lsp/learn-lsp" },
---   on_attach = require("custom.config.lsp_config"),
--- }
---
--- if not client then
---   vim.notify "client is no good"
--- else
---   vim.api.nvim_create_autocmd("FileType", {
---     pattern = "markdown",
---     callback = function()
---       vim.lsp.buf_attach_client(0, client)
---     end
---   })
--- end
-
 -- Custom user commands
 vim.api.nvim_create_user_command('Now', ":pu=strftime('%c')", { desc = 'Drop current date in text' })
 vim.api.nvim_create_user_command('Shruggie', "put ='¯\\_(ツ)_/¯'", { desc = 'Insert a shruggie emoticon' })
 
-vim.api.nvim_set_keymap('n', '<leader>tz', ':ZenMode<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>doc', ':Neogen<CR>', { noremap = true, silent = true })
-
 vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
-
--- [formatting]
--- Create an augroup that is used for managing our formatting autocmds.
---      We need one augroup per client to make sure that multiple clients
---      can attach to the same buffer without interfering with each other.
-local _augroups = {}
-local get_augroup = function(client)
-  if not _augroups[client.id] then
-    local group_name = 'kickstart-lsp-format-' .. client.name
-    local id = vim.api.nvim_create_augroup(group_name, { clear = true })
-    _augroups[client.id] = id
-  end
-
-  return _augroups[client.id]
-end
-
--- Whenever an LSP attaches to a buffer, we will run this function.
---
--- See `:help LspAttach` for more information about this autocmd event.
-vim.api.nvim_create_autocmd('LspAttach', {
-  group = vim.api.nvim_create_augroup('kickstart-lsp-attach-format', { clear = true }),
-  -- This is where we attach the autoformatting for reasonable clients
-  callback = function(args)
-    local client_id = args.data.client_id
-    local client = vim.lsp.get_client_by_id(client_id)
-
-    if client == nil then
-      return
-    end
-
-    -- Only attach to clients that support document formatting
-    if not client.server_capabilities.documentFormattingProvider then
-      return
-    end
-
-    -- Tsserver usually works poorly. Sorry you work with bad languages
-    -- You can remove this line if you know what you're doing :)
-    if client.name == 'tsserver' then
-      return
-    end
-  end,
-})
-
--- vim.opt.guicursor =
--- "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,sm:block"

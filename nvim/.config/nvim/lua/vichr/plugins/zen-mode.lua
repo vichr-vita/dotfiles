@@ -63,4 +63,8 @@ return {
     -- callback where you can add custom code when the Zen window closes
     on_close = function() end,
   },
+  config = function()
+    vim.api.nvim_set_keymap('n', '<leader>tz', ':ZenMode<CR>', { noremap = true, silent = true })
+    vim.api.nvim_set_keymap('n', '<leader>doc', ':Neogen<CR>', { noremap = true, silent = true })
+  end,
 }
