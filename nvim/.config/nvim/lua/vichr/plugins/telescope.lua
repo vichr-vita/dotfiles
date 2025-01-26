@@ -17,19 +17,21 @@ return {
     -- See `:help telescope` and `:help telescope.setup()`
 
     local telescope_default_config = {
-      defaults = {
-        file_ignore_patterns = {
-          "node_modules",
-          ".git",
-          "venv",
-        },
-        mappings = {
-          i = {
-            ['<C-u>'] = false,
-            ['<C-d>'] = false,
+      defaults = vim.tbl_extend("force",
+        require("telescope.themes").get_ivy(),
+        {
+          file_ignore_patterns = {
+            "node_modules",
+            ".git",
+            "venv",
           },
-        }
-      },
+          mappings = {
+            i = {
+              ['<C-u>'] = false,
+              ['<C-d>'] = false,
+            },
+          }
+        }),
       pickers = {
         find_files = {
           hidden = true
