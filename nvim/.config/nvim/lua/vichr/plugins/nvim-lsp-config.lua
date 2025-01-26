@@ -10,8 +10,8 @@ return {
       'williamboman/mason.nvim',
       config = true,
       opts = {
-        ensure_installed = { "prettier", "black", "debugpy", "pylint" } -- non-lsp
-      }
+        ensure_installed = { 'prettier', 'black', 'debugpy', 'pylint' }, -- non-lsp
+      },
     },
     'williamboman/mason-lspconfig.nvim',
     'saghen/blink.cmp',
@@ -23,10 +23,10 @@ return {
       opts = {
         notification = {
           window = {
-            winblend = 0
-          }
-        }
-      }
+            winblend = 0,
+          },
+        },
+      },
     },
     -- Additional lua configuration, makes nvim stuff amazing!
     'folke/neodev.nvim',
@@ -47,7 +47,6 @@ return {
           staticcheck = true,
           -- gofumpt = true,
         },
-
       },
       pyright = {},
       lua_ls = {
@@ -60,19 +59,18 @@ return {
         -- cmd = { 'typescript-language-server', '--stdio' },
         initializationOptions = {
           tsserver = {
-            path = '/Some/path/node_modules/typescript/lib'
-          }
+            path = '/Some/path/node_modules/typescript/lib',
+          },
         },
         typescript = {
-          tsdk = { "/Some/path/node_modules/typescript/lib" },
-        }
+          tsdk = { '/Some/path/node_modules/typescript/lib' },
+        },
       },
       eslint = {},
     }
 
     -- Setup neovim lua configuration
     require('neodev').setup()
-
 
     -- Specify how the border looks like
     local border = {
@@ -86,15 +84,13 @@ return {
       { '│', 'FloatBorder' },
     }
 
-
-
     -- Add border to the diagnostic popup window
-    vim.diagnostic.config({
+    vim.diagnostic.config {
       virtual_text = {
         prefix = '■ ', -- Could be '●', '▎', 'x', '■', , 
       },
       float = { border = border },
-    })
+    }
 
     -- Add the border on hover and on signature help popup window
     local handlers = {
@@ -102,8 +98,7 @@ return {
       ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = border }),
     }
 
-    local on_attach = require "vichr.config.lsp_config"
-
+    local on_attach = require 'vichr.config.lsp_config'
 
     -- local capabilities = vim.lsp.protocol.make_client_capabilities()
     -- capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
@@ -111,18 +106,17 @@ return {
     -- Ensure the servers above are installed
     local mason_lspconfig = require 'mason-lspconfig'
 
-
     mason_lspconfig.setup {
       ensure_installed = vim.tbl_keys(servers),
     }
 
     mason_lspconfig.setup_handlers {
       function(server_name)
-        if server_name == "rust_analyzer" then
+        if server_name == 'rust_analyzer' then
           return
         end
         require('lspconfig')[server_name].setup {
-          capabilities = require("blink-cmp").get_lsp_capabilities(),
+          capabilities = require('blink-cmp').get_lsp_capabilities(),
           on_attach = on_attach,
           settings = servers[server_name],
           handlers = handlers,
@@ -133,21 +127,18 @@ return {
     vim.g.rustaceanvim = function()
       return {
         -- Plugin configuration
-        tools = {
-        },
+        tools = {},
         -- LSP configuration
         server = {
           on_attach = on_attach,
           default_settings = {
             -- rust-analyzer language server configuration
-            ['rust-analyzer'] = {
-            },
+            ['rust-analyzer'] = {},
           },
         },
         -- DAP configuration
-        dap = {
-        },
+        dap = {},
       }
     end
-  end
+  end,
 }

@@ -18,7 +18,6 @@ return {
     'hrsh7th/cmp-path',
     'hrsh7th/cmp-cmdline',
     'hrsh7th/nvim-cmp',
-
   },
   opts = function()
     -- local M = require "custom.config.cmp_config"
@@ -30,28 +29,26 @@ return {
     require('luasnip.loaders.from_vscode').lazy_load()
     luasnip.config.setup {}
 
-
     -- require("cmp-graphql").setup({
     --   schema_path = "graphql.schema.json",
     -- })
 
-
     cmp.setup.filetype({ 'sql' }, {
       sources = {
         { name = 'vim-dadbod-completion' },
-        { name = 'buffer' }
-      }
+        { name = 'buffer' },
+      },
     })
 
-    cmp.setup.filetype("http", {
+    cmp.setup.filetype('http', {
       sources = cmp.config.sources({
-        { name = "kulala-cmp-graphql" },
+        { name = 'kulala-cmp-graphql' },
       }, {
-        { name = "buffer" },
+        { name = 'buffer' },
       }),
     })
 
-    cmp.setup({
+    cmp.setup {
       window = {
         completion = cmp.config.window.bordered(),
       },
@@ -99,12 +96,13 @@ return {
           option = {
             get_cwd = function()
               return vim.fn.getcwd()
-            end
-          }
-        }, {
-        name = 'buffer'
-      }
+            end,
+          },
+        },
+        {
+          name = 'buffer',
+        },
       },
-    })
-  end
+    }
+  end,
 }

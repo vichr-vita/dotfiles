@@ -20,7 +20,7 @@ return {
 
     -- Add your own debuggers here
     'leoluz/nvim-dap-go',
-    'mfussenegger/nvim-dap-python'
+    'mfussenegger/nvim-dap-python',
   },
   config = function()
     local dap = require 'dap'
@@ -72,21 +72,20 @@ return {
           step_back = 'b',
           run_last = '▶▶',
           terminate = '⏹',
-          disconnect = "⏏",
+          disconnect = '⏏',
         },
       },
     }
     -- toggle to see last session result. Without this ,you can't see session output in case of unhandled exception.
-    vim.keymap.set("n", "<F7>", dapui.toggle)
+    vim.keymap.set('n', '<F7>', dapui.toggle)
 
     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
 
     -- Install python specific config
-    require('dap-python').setup('~/.local/share/nvim/mason/packages/debugpy/venv/bin/python')
+    require('dap-python').setup '~/.local/share/nvim/mason/packages/debugpy/venv/bin/python'
 
-    vim.api.nvim_create_user_command("PyDebugTest", ":lua require('dap-python').test_method()",
-      { desc = "Debug the closest method above the cursor." })
+    vim.api.nvim_create_user_command('PyDebugTest', ":lua require('dap-python').test_method()", { desc = 'Debug the closest method above the cursor.' })
   end,
 }

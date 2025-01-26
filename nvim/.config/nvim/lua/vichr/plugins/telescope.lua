@@ -9,45 +9,42 @@ return {
       -- NOTE: If you are having trouble with this installation,
       --       refer to the README for telescope-fzf-native for more instructions.
       build = 'make',
-    }
-
+    },
   },
   config = function()
     -- [[ Configure Telescope ]]
     -- See `:help telescope` and `:help telescope.setup()`
 
     local telescope_default_config = {
-      defaults = vim.tbl_extend("force",
-        require("telescope.themes").get_ivy(),
-        {
-          file_ignore_patterns = {
-            "node_modules",
-            ".git",
-            "venv",
+      defaults = vim.tbl_extend('force', require('telescope.themes').get_ivy(), {
+        file_ignore_patterns = {
+          'node_modules',
+          '.git',
+          'venv',
+        },
+        mappings = {
+          i = {
+            ['<C-u>'] = false,
+            ['<C-d>'] = false,
           },
-          mappings = {
-            i = {
-              ['<C-u>'] = false,
-              ['<C-d>'] = false,
-            },
-          }
-        }),
+        },
+      }),
       pickers = {
         find_files = {
-          hidden = true
-        }
+          hidden = true,
+        },
       },
       extension = {
-        fzf = {}
-      }
+        fzf = {},
+      },
     }
 
-    require("telescope").load_extension("fzf")
+    require('telescope').load_extension 'fzf'
 
     -- Merge tables
     local function merge_two_tables(t1, t2)
       for k, v in pairs(t2) do
-        if (type(v) == "table") and (type(t1[k] or false) == "table") then
+        if (type(v) == 'table') and (type(t1[k] or false) == 'table') then
           merge_two_tables(t1[k], t2[k])
         else
           t1[k] = v
@@ -55,7 +52,6 @@ return {
       end
       return t1
     end
-
 
     -- Load project-specific Telescope configuration
     local function load_project_config()
@@ -67,15 +63,12 @@ return {
       return {}
     end
 
-
-
     -- Override Telescope configuration with project-specific settings
     local telescope_project_config = load_project_config()
     local final_config = merge_two_tables(telescope_default_config, telescope_project_config)
     -- print("Telescope configuration:")
     -- print(vim.inspect(final_config))
     require('telescope').setup(final_config)
-
 
     -- Enable telescope fzf native, if installed
     -- pcall(require('telescope').load_extension, 'fzf')
@@ -97,5 +90,5 @@ return {
     vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
     vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
     vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
-  end
+  end,
 }
