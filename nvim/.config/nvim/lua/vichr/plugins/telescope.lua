@@ -36,8 +36,13 @@ return {
         find_files = {
           hidden = true
         }
+      },
+      extension = {
+        fzf = {}
       }
     }
+
+    require("telescope").load_extension("fzf")
 
     -- Merge tables
     local function merge_two_tables(t1, t2)
