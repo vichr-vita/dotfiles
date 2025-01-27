@@ -15,6 +15,7 @@ padding = { x = 20, y = 20 }
 # opacity = 0.8
 opacity = 1
 blur = true
+option_as_alt = "OnlyLeft" # (macos only)
 
 [font]
 normal = { family = "JetBrainsMono Nerd Font", style = "Regular"}
