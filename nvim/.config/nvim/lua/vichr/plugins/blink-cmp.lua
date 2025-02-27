@@ -3,6 +3,7 @@ return {
   -- optional: provides snippets for the snippet source
   dependencies = 'rafamadriz/friendly-snippets',
   version = '*',
+  enabled = false,
   opts = {
     keymap = { preset = 'default' },
 

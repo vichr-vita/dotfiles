@@ -15,6 +15,7 @@ return {
       ['go'] = true,
       ['python'] = true,
       ['svelte'] = true,
+      ['typescriptreact'] = true,
     }
   end,
 }

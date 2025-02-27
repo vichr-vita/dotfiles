@@ -100,8 +100,8 @@ return {
 
     local on_attach = require 'vichr.config.lsp_config'
 
-    -- local capabilities = vim.lsp.protocol.make_client_capabilities()
-    -- capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+    capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
     -- Ensure the servers above are installed
     local mason_lspconfig = require 'mason-lspconfig'
@@ -116,7 +116,7 @@ return {
           return
         end
         require('lspconfig')[server_name].setup {
-          capabilities = require('blink-cmp').get_lsp_capabilities(),
+          capabilities = capabilities,
           on_attach = on_attach,
           settings = servers[server_name],
           handlers = handlers,
