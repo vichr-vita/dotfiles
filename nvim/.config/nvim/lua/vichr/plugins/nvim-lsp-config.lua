@@ -55,7 +55,7 @@ return {
           telemetry = { enable = false },
         },
       },
-      tsserver = {
+      ts_ls = {
         -- cmd = { 'typescript-language-server', '--stdio' },
         initializationOptions = {
           tsserver = {
