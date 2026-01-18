@@ -48,7 +48,7 @@ local common_config = function(_, bufnr)
     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
   end, { desc = '[I]nlay [H]ints [Toggle]' })
 
-  vim.api.nvim_set_keymap('n', '<leader>fm', ':Format<CR>', { noremap = true, silent = true })
+  vim.keymap.set('n', '<leader>fm', ':Format<CR>', { noremap = true, silent = true, desc = '[F]ormat buffer' })
 end
 
 local on_attach = function(_, bufnr)

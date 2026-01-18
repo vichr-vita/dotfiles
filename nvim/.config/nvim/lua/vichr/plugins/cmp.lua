@@ -1,7 +1,8 @@
 return {
-  enabled = true,
   -- Autocompletion
   'hrsh7th/nvim-cmp',
+  enabled = true,
+  event = 'InsertEnter',
   dependencies = {
     -- Snippet Engine & its associated nvim-cmp source
     'L3MON4D3/LuaSnip',
@@ -12,12 +13,9 @@ return {
 
     -- Adds a number of user-friendly snippets
     'rafamadriz/friendly-snippets',
-    'neovim/nvim-lspconfig',
-    'hrsh7th/cmp-nvim-lsp',
     'hrsh7th/cmp-buffer',
     'hrsh7th/cmp-path',
     'hrsh7th/cmp-cmdline',
-    'hrsh7th/nvim-cmp',
   },
   opts = function()
     -- local M = require "custom.config.cmp_config"

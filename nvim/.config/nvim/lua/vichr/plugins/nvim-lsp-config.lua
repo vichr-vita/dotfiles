@@ -14,7 +14,7 @@ return {
       },
     },
     'williamboman/mason-lspconfig.nvim',
-    'saghen/blink.cmp',
+    -- 'saghen/blink.cmp', -- removed in favor of hrsh7th/nvim-cmp
 
     -- Useful status updates for LSP
     -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
@@ -101,7 +101,10 @@ return {
     local on_attach = require 'vichr.config.lsp_config'
 
     local capabilities = vim.lsp.protocol.make_client_capabilities()
-    capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+    local ok_cmp, cmp_nvim_lsp = pcall(require, 'cmp_nvim_lsp')
+    if ok_cmp and cmp_nvim_lsp and cmp_nvim_lsp.default_capabilities then
+      capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
+    end
 
     -- Ensure the servers above are installed
     local mason_lspconfig = require 'mason-lspconfig'
