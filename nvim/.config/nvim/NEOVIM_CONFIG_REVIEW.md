@@ -68,7 +68,7 @@ This document captures the configuration analysis produced by the assistant. Kee
 
 9 — Next actions (choose one)
 -----------------------------
-1) I will implement the critical fixes and open a branch with changes. (recommended)
+1) Done — replaced `vim.loop` usage with a `vim.uv` compatibility guard in `init.lua`; changes committed on branch: master (commit 5360294). (completed)
 2) I will only apply the minimal critical fixes.
 3) I will perform a full polish pass (style, lazy-loading, cleanup).
 
