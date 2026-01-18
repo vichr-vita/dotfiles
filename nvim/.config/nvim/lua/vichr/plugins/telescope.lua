@@ -57,8 +57,10 @@ return {
     local function load_project_config()
       local project_config = vim.fn.getcwd() .. '/.telescope.lua'
       if vim.fn.filereadable(project_config) == 1 then
-        local config = dofile(project_config)
-        return config
+        local ok, config = pcall(dofile, project_config)
+        if ok and type(config) == 'table' then
+          return config
+        end
       end
       return {}
     end

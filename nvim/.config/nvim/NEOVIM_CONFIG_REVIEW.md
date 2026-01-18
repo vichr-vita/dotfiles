@@ -18,7 +18,7 @@ This document captures the configuration analysis produced by the assistant. Kee
 - DONE Deprecated API: `vim.loop.fs_stat()` used in `init.lua` — replace with `vim.uv.fs_stat()`.
 - DONE Completion confusion: both `nvim-cmp` (enabled) and `blink-cmp` (disabled) exist; LSP uses `cmp_nvim_lsp` capabilities but `blink` is referenced as dependency — choose one and align LSP capabilities.
 - DONE Duplicate plugin registration: `autoformat.lua` re-registers `neovim/nvim-lspconfig` with an empty config — remove duplicate.
-- Unsafe project config loading: `telescope.lua` uses `dofile()` without `pcall` — wrap in `pcall(dofile, ...)`.
+- DONE Unsafe project config loading: `telescope.lua` uses `dofile()` without `pcall` — wrapped in `pcall(dofile, ...)`.
 
 3 — Important improvements
 --------------------------
