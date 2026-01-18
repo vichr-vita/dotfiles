@@ -55,17 +55,17 @@ return {
           telemetry = { enable = false },
         },
       },
-      ts_ls = {
-        -- cmd = { 'typescript-language-server', '--stdio' },
-        initializationOptions = {
-          tsserver = {
-            path = '/Some/path/node_modules/typescript/lib',
-          },
-        },
-        typescript = {
-          tsdk = { '/Some/path/node_modules/typescript/lib' },
-        },
-      },
+      -- ts_ls = {
+      --   -- cmd = { 'typescript-language-server', '--stdio' },
+      --   initializationOptions = {
+      --     tsserver = {
+      --       path = '/Some/path/node_modules/typescript/lib',
+      --     },
+      --   },
+      --   typescript = {
+      --     tsdk = { '/Some/path/node_modules/typescript/lib' },
+      --   },
+      -- },
       eslint = {},
     }
 

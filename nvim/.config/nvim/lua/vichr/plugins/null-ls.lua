@@ -10,8 +10,8 @@ return {
     local opts = {
       sources = {
         -- js/ts
-        require 'none-ls.diagnostics.eslint',
-        null_ls.builtins.formatting.prettier,
+        -- require 'none-ls.diagnostics.eslint',
+        -- null_ls.builtins.formatting.prettier,
         -- python
         null_ls.builtins.diagnostics.pylint,
       },
