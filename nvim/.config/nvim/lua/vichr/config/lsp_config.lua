@@ -40,8 +40,15 @@ local common_config = function(_, bufnr)
 
   -- Create a command `:Format` local to the LSP buffer
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-    require('conform').format { bufnr = bufnr }
-    -- vim.lsp.buf.format()
+    local ok, conform = pcall(require, 'conform')
+    if ok and conform and type(conform.format) == 'function' then
+      conform.format { bufnr = bufnr }
+    else
+      -- fallback to lsp formatting if conform isn't available
+      pcall(function()
+        vim.lsp.buf.format()
+      end)
+    end
   end, { desc = 'Format current buffer with LSP' })
 
   vim.api.nvim_buf_create_user_command(bufnr, 'IHToggle', function(_)

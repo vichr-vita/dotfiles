@@ -12,6 +12,12 @@ return {
     },
   },
   config = function()
+    -- Protect requires so missing optional plugins don't break startup
+    local ok_telescope, telescope = pcall(require, 'telescope')
+    if not ok_telescope then
+      return
+    end
+
     -- [[ Configure Telescope ]]
     -- See `:help telescope` and `:help telescope.setup()`
 
@@ -39,7 +45,10 @@ return {
       },
     }
 
-    require('telescope').load_extension 'fzf'
+    -- Try to load fzf extension if available
+    pcall(function()
+      telescope.load_extension('fzf')
+    end)
 
     -- Merge tables
     local function merge_two_tables(t1, t2)
@@ -70,10 +79,7 @@ return {
     local final_config = merge_two_tables(telescope_default_config, telescope_project_config)
     -- print("Telescope configuration:")
     -- print(vim.inspect(final_config))
-    require('telescope').setup(final_config)
-
-    -- Enable telescope fzf native, if installed
-    -- pcall(require('telescope').load_extension, 'fzf')
+    telescope.setup(final_config)
 
     -- See `:help telescope.builtin`
     vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })

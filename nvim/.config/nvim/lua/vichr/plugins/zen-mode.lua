@@ -64,7 +64,7 @@ return {
     on_close = function() end,
   },
   config = function()
-    vim.api.nvim_set_keymap('n', '<leader>tz', ':ZenMode<CR>', { noremap = true, silent = true })
-    vim.api.nvim_set_keymap('n', '<leader>doc', ':Neogen<CR>', { noremap = true, silent = true })
+    vim.keymap.set('n', '<leader>tz', ':ZenMode<CR>', { noremap = true, silent = true, desc = 'Toggle Zen Mode' })
+    vim.keymap.set('n', '<leader>doc', ':Neogen<CR>', { noremap = true, silent = true, desc = 'Run Neogen (doc gen)' })
   end,
 }
