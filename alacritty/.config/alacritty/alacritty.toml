@@ -10,7 +10,8 @@ TERM = "tmux-256color"
 
 [window]
 startup_mode = "SimpleFullscreen"
-decorations = "None"
+# startup_mode = "Windowed"
+decorations = "Full"
 padding = { x = 20, y = 20 }
 # opacity = 0.8
 opacity = 1
