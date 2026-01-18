@@ -22,9 +22,9 @@ This document captures the configuration analysis produced by the assistant. Kee
 
 3 — Important improvements
 --------------------------
-- Missing `pcall` protection around `require()`/`dofile()` in multiple plugin configs (telescope, LSP, conform usage). Add `pcall` checks.
-- Swap deprecated keymap API (`vim.api.nvim_set_keymap`) to `vim.keymap.set` in at least 5 files (copilot.lua, lsp_config.lua, zen-mode.lua, twilight.lua, lazygit.lua).
-- Add `desc` to keymaps to populate which-key menus for ~7 maps currently missing descriptions.
+- DONE Missing `pcall` protection around `require()`/`dofile()` in multiple plugin configs (telescope, LSP, conform usage). Add `pcall` checks.
+- DONE Swap deprecated keymap API (`vim.api.nvim_set_keymap`) to `vim.keymap.set` in at least 5 files (copilot.lua, lsp_config.lua, zen-mode.lua, twilight.lua, lazygit.lua).
+- DONE Add `desc` to keymaps to populate which-key menus for ~7 maps currently missing descriptions.
 - Aggressive lazy-loading: many plugins load eagerly. Candidate plugins to lazy-load: dadbod suite (on `cmd`), ledger (on `ft`), rainbox-csv (on `ft`), lazygit (on `cmd`), zen-mode/twilight (on `cmd`).
 - Remove or delete disabled plugins/configs if not used (e.g., `blink-cmp.lua`, `debug.lua`).
 
