@@ -5,4 +5,5 @@
 
 -- Removed duplicate registration of nvim-lspconfig.
 -- Autoformat behavior should be handled in the main LSP config (lua/vichr/config/lsp_config.lua).
-return nil
+-- Return an empty table so `require('vichr.plugins')` / lazy.nvim import doesn't error.
+return {}
