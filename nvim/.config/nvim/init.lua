@@ -127,6 +127,10 @@ set_filetype({ 'docker-compose.yml' }, 'yaml.docker-compose')
 set_filetype({ 'compose.yml' }, 'yaml.docker-compose')
 set_filetype({ 'compose.yaml' }, 'yaml.docker-compose')
 
+-- Ledger filetypes
+-- Recognize common ledger journal files so the LSP and ftplugins activate
+set_filetype({ '*.ledger', '*.journal', '*.dat' }, 'ledger')
+
 -- Custom user commands
 vim.api.nvim_create_user_command('Now', ":pu=strftime('%c')", { desc = 'Drop current date in text' })
 vim.api.nvim_create_user_command('Shruggie', "put ='¯\\_(ツ)_/¯'", { desc = 'Insert a shruggie emoticon' })
