@@ -11,6 +11,7 @@ return {
       config = true,
       opts = {
         ensure_installed = { 'prettier', 'black', 'debugpy', 'pylint' }, -- non-lsp
+        PATH = 'append',
       },
     },
     'williamboman/mason-lspconfig.nvim',
@@ -106,25 +107,33 @@ return {
       capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
     end
 
-    -- Ensure the servers above are installed
+    -- Ensure the servers above are installed and configure them using the
+    -- new native `vim.lsp.config()` API. mason-lspconfig v2 removed
+    -- `setup_handlers()` and the `handlers` setting; servers should be
+    -- registered with `vim.lsp.config()` (or via an {after/}lsp/*.lua file)
+    -- before calling `mason-lspconfig.setup()` so mason can install them.
     local mason_lspconfig = require 'mason-lspconfig'
+
+    for server_name, server_settings in pairs(servers) do
+      if server_name ~= 'rust_analyzer' then
+        local server_opts = {
+          capabilities = capabilities,
+          on_attach = on_attach,
+          settings = server_settings,
+          handlers = handlers,
+        }
+
+        -- Preferred new API
+        vim.lsp.config(server_name, server_opts)
+      end
+    end
 
     mason_lspconfig.setup {
       ensure_installed = vim.tbl_keys(servers),
-    }
-
-    mason_lspconfig.setup_handlers {
-      function(server_name)
-        if server_name == 'rust_analyzer' then
-          return
-        end
-        require('lspconfig')[server_name].setup {
-          capabilities = capabilities,
-          on_attach = on_attach,
-          settings = servers[server_name],
-          handlers = handlers,
-        }
-      end,
+      -- mason-lspconfig v2 introduced `automatic_enable` to replace the
+      -- old handlers-based automatic setup. Allow mason to enable servers
+      -- configured through `vim.lsp.config()`.
+      automatic_enable = true,
     }
 
     vim.g.rustaceanvim = function()
