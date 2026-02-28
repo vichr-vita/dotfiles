@@ -56,17 +56,6 @@ return {
           telemetry = { enable = false },
         },
       },
-      -- ts_ls = {
-      --   -- cmd = { 'typescript-language-server', '--stdio' },
-      --   initializationOptions = {
-      --     tsserver = {
-      --       path = '/Some/path/node_modules/typescript/lib',
-      --     },
-      --   },
-      --   typescript = {
-      --     tsdk = { '/Some/path/node_modules/typescript/lib' },
-      --   },
-      -- },
       eslint = {},
     }
 
@@ -115,17 +104,15 @@ return {
     local mason_lspconfig = require 'mason-lspconfig'
 
     for server_name, server_settings in pairs(servers) do
-      if server_name ~= 'rust_analyzer' then
-        local server_opts = {
-          capabilities = capabilities,
-          on_attach = on_attach,
-          settings = server_settings,
-          handlers = handlers,
-        }
+      local server_opts = {
+        capabilities = capabilities,
+        on_attach = on_attach,
+        settings = server_settings,
+        handlers = handlers,
+      }
 
-        -- Preferred new API
-        vim.lsp.config(server_name, server_opts)
-      end
+      -- Preferred new API
+      vim.lsp.config(server_name, server_opts)
     end
 
     mason_lspconfig.setup {
@@ -135,6 +122,5 @@ return {
       -- configured through `vim.lsp.config()`.
       automatic_enable = true,
     }
-
   end,
 }
