@@ -9,6 +9,7 @@ vim.g.maplocalleader = ' '
 --    `:help lazy.nvim.txt` for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 local uv = vim.uv or vim.loop
+local startup_cwd = uv.cwd() or vim.fn.getcwd()
 if not uv.fs_stat(lazypath) then
   vim.fn.system {
     'git',
@@ -141,3 +142,13 @@ vim.keymap.set('n', '<M-j>', '<cmd>cnext<CR>')
 vim.keymap.set('n', '<M-k>', '<cmd>cprev<CR>')
 
 pcall(require, 'work')
+
+vim.api.nvim_create_autocmd('VimEnter', {
+  once = true,
+  callback = function()
+    local project_config = startup_cwd .. '/.neovimrc.lua'
+    if vim.fn.filereadable(project_config) == 1 then
+      vim.cmd.luafile(vim.fn.fnameescape(project_config))
+    end
+  end,
+})
