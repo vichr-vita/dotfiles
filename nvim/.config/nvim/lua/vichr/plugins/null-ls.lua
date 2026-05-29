@@ -5,16 +5,10 @@ return {
   },
   opts = function()
     -- local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
-    local null_ls = require 'null-ls'
+    -- local null_ls = require 'null-ls'
 
     local opts = {
-      sources = {
-        -- js/ts
-        -- require 'none-ls.diagnostics.eslint',
-        -- null_ls.builtins.formatting.prettier,
-        -- python
-        null_ls.builtins.diagnostics.pylint,
-      },
+      sources = {},
       -- the on attach formatting is handled in autoformat.lua
     }
     return opts
