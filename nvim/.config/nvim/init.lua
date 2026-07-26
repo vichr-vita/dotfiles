@@ -106,6 +106,18 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
+vim.keymap.set('n', '<leader>cc', function()
+  local buffer = vim.api.nvim_get_current_buf()
+  if vim.bo[buffer].buftype ~= '' or vim.api.nvim_buf_get_name(buffer) == '' then
+    vim.notify('Current buffer is not a file buffer', vim.log.levels.WARN)
+    return
+  end
+
+  local path = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(buffer), ':p')
+  vim.fn.setreg('+', path, 'v')
+  vim.notify('File path copied to clipboard: ' .. path)
+end, { desc = 'Copy current file path to clipboard' })
+
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
