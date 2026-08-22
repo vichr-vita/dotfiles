@@ -153,6 +153,8 @@ vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
 vim.keymap.set('n', '<M-j>', '<cmd>cnext<CR>')
 vim.keymap.set('n', '<M-k>', '<cmd>cprev<CR>')
 
+require('vichr.ai_edit').setup()
+
 pcall(require, 'work')
 
 vim.api.nvim_create_autocmd('VimEnter', {
