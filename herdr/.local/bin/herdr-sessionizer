@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if ! command -v fzf >/dev/null 2>&1; then
+    printf 'herdr-sessionizer: fzf is not installed\n' >&2
+    exit 1
+fi
+
+if ! command -v jq >/dev/null 2>&1; then
+    printf 'herdr-sessionizer: jq is not installed\n' >&2
+    exit 1
+fi
+
+if [[ $# -eq 1 ]]; then
+    selected=$1
+else
+    projects_dir=$HOME/projects
+    selected=$(
+        {
+            find "$projects_dir" -mindepth 1 -maxdepth 1 -type d -print
+            find "$projects_dir" -mindepth 3 -maxdepth 3 -type d -path "$projects_dir/*/.worktrees/*" -print
+        } | sort -u | fzf --prompt='project> '
+    ) || exit 0
+fi
+
+[[ -n $selected ]] || exit 0
+
+selected=$(realpath "$selected")
+[[ -d $selected ]] || {
+    printf 'herdr-sessionizer: not a directory: %s\n' "$selected" >&2
+    exit 1
+}
+
+workspace_id=$(
+    herdr api snapshot |
+        jq -r --arg cwd "$selected" '
+            .result.snapshot.panes
+            | map(select(.cwd == $cwd))
+            | first
+            | .workspace_id // empty
+        '
+)
+
+if [[ -n $workspace_id ]]; then
+    herdr workspace focus "$workspace_id" >/dev/null
+else
+    herdr workspace create \
+        --cwd "$selected" \
+        --label "$(basename "$selected")" \
+        --focus >/dev/null
+fi
