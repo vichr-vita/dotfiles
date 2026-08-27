@@ -1,7 +1,6 @@
 -- Fuzzy Finder (files, lsp, etc)
 return {
   'nvim-telescope/telescope.nvim',
-  branch = '0.1.x',
   dependencies = {
     'nvim-lua/plenary.nvim',
     {
@@ -47,7 +46,7 @@ return {
 
     -- Try to load fzf extension if available
     pcall(function()
-      telescope.load_extension('fzf')
+      telescope.load_extension 'fzf'
     end)
 
     -- Merge tables

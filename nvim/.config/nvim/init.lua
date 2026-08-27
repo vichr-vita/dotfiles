@@ -164,3 +164,17 @@ vim.api.nvim_create_autocmd('VimEnter', {
     end
   end,
 })
+
+-- vim.opt.runtimepath:append("/home/vichr/projects/tree-sitter-grulev3")
+--
+--
+-- vim.filetype.add({
+--   extension = { grl = 'grl' },
+-- })
+--
+-- vim.treesitter.language.add('grule', {
+--   path = "/home/vichr/projects/tree-sitter-grulev3/libtree-sitter-grulev3.so",
+--   symbol_name = "grulev3",
+-- })
+--
+-- vim.treesitter.language.register('grule', { 'grl' })
