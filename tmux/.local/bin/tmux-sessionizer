@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if (($# > 1)); then
+  echo "usage: tmux-sessionizer [directory]" >&2
+  exit 1
+fi
+
+if [[ $# -eq 1 ]]; then
+  selected=$1
+else
+  if ! command -v fzf >/dev/null 2>&1; then
+    echo "tmux-sessionizer requires fzf when no directory is provided" >&2
+    exit 1
+  fi
+
+  roots=()
+
+  if [[ -n "${TMUX_SESSIONIZER_ROOTS:-}" ]]; then
+    IFS=':' read -r -a configured_roots <<< "${TMUX_SESSIONIZER_ROOTS}"
+    for root in "${configured_roots[@]}"; do
+      [[ -d "$root" ]] && roots+=("$root")
+    done
+  else
+    default_roots=(
+      "$HOME/projects"
+      "$HOME/src"
+      "$HOME/work"
+      "$HOME/dev"
+      "$HOME/code"
+      "$HOME/.config"
+      "$HOME/Library/CloudStorage"
+    )
+
+    for root in "${default_roots[@]}"; do
+      [[ -d "$root" ]] && roots+=("$root")
+    done
+  fi
+
+  if ((${#roots[@]} == 0)); then
+    echo "No tmux-sessionizer search roots exist. Set TMUX_SESSIONIZER_ROOTS to configure them." >&2
+    exit 1
+  fi
+
+  mapfile -t candidates < <(find "${roots[@]}" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort -u)
+
+  if ((${#candidates[@]} == 0)); then
+    echo "No project directories found under: ${roots[*]}" >&2
+    exit 1
+  fi
+
+  selected=$(printf '%s\n' "${candidates[@]}" | fzf || true)
+fi
+
+if [[ -z "${selected:-}" ]]; then
+  exit 0
+fi
+
+if [[ ! -d "$selected" ]]; then
+  echo "Not a directory: $selected" >&2
+  exit 1
+fi
+
+selected_name=$(basename "$selected" | tr . _)
+tmux_running=$(pgrep tmux || true)
+
+if [[ -z "${TMUX:-}" ]] && [[ -z "$tmux_running" ]]; then
+  exec tmux new-session -s "$selected_name" -c "$selected"
+fi
+
+if ! tmux has-session -t="$selected_name" 2>/dev/null; then
+  tmux new-session -ds "$selected_name" -c "$selected"
+fi
+
+if [[ -n "${TMUX:-}" ]]; then
+  exec tmux switch-client -t "$selected_name"
+fi
+
+exec tmux attach-session -t "$selected_name"

@@ -1,0 +1,5 @@
+^\.stylua\.toml$
+^\.gitignore$
+^README\.md$
+^LICENSE\.md$
+^NEOVIM_CONFIG_REVIEW\.md$
