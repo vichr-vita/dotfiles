@@ -1,27 +1,9 @@
 onboarding = false
 [theme]
-name = "catppuccin"
+name = "terminal"
 
 [theme.custom]
-panel_bg = "#191925"
-sidebar_bg = "#191925"
-active_row_bg = "#202031"
-selection_bg = "#302540"
-surface0 = "#202031"
-surface1 = "#302540"
-surface_dim = "#191925"
-overlay0 = "#5f6077"
-overlay1 = "#797a96"
-text = "#c8c9e5"
-subtext0 = "#81849f"
-mauve = "#c096ed"
-green = "#a7eb9c"
-yellow = "#f6dfa0"
-red = "#fa7e9f"
-blue = "#aeb9ff"
-teal = "#71ddd6"
-peach = "#e77b58"
-accent = "#be97ed"
+panel_bg = "black"
 
 [keys]
 prefix = "ctrl+a"
@@ -69,7 +51,7 @@ height = "80%"
 directory = "~/.herdr/worktrees"
 
 [ui]
-accent = "#be97ed"
+accent = "blue"
 tab_bar_position = "bottom"
 pane_borders = true
 pane_outer_borders = true

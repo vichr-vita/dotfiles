@@ -7,7 +7,7 @@ target_dir=$HOME
 dry_run=false
 install_all=false
 default_packages=(nvim tmux)
-available_packages=(alacritty nvim skhd tmux yabai zsh)
+available_packages=(alacritty herdr nvim skhd tmux yabai zsh)
 packages=()
 
 usage() {

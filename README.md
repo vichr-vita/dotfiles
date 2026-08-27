@@ -9,13 +9,14 @@ For a focused setup, this repo now includes `./stow.sh`, which defaults to insta
 - `nvim`
 - `tmux`
 
-The tmux package also installs `~/.local/bin/tmux-sessionizer`, and the Stow helper uses `--no-folding` so only the selected files are linked into your home directory.
+The tmux and Herdr packages also install their sessionizer scripts. The Stow helper uses `--no-folding` so only selected files are linked into your home directory.
 
 ## Prerequisites
 
 - GNU Stow
 - Neovim
 - tmux
+- Herdr and `jq` for the optional `herdr` package
 - `fzf` for `tmux-sessionizer`
 - `xclip` for the tmux yank binding on Linux
 
@@ -27,6 +28,7 @@ The tmux package also installs `~/.local/bin/tmux-sessionizer`, and the Stow hel
 
 # Pick packages explicitly
 ./stow.sh nvim tmux
+./stow.sh herdr nvim
 ./stow.sh alacritty nvim tmux
 
 # Show the curated package list or stow everything in it

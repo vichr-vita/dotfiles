@@ -1,14 +1,16 @@
 # Herdr
 
-Herdr 0.8.2 replaces tmux for normal interactive work. Tmux stays installed for rollback and existing sessions.
+Herdr replaces tmux for normal interactive work. Tmux stays installed for rollback and existing sessions.
 
 Install configuration from repository root:
 
 ```sh
-stow -t "$HOME" herdr
+./stow.sh herdr
 herdr config check
 herdr server reload-config
 ```
+
+Herdr uses the terminal ANSI palette, so colors follow the active Omarchy theme.
 
 ## Key map
 
